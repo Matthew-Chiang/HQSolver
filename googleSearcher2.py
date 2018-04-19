@@ -1,0 +1,78 @@
+import urllib.request
+import requests
+from bs4 import BeautifulSoup
+import time
+
+USER_AGENT = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
+
+
+def fetch_results(search_term, number_results, language_code):
+    assert isinstance(search_term, str), 'Search term must be a string'
+    assert isinstance(number_results, int), 'Number of results must be an integer'
+    escaped_search_term = search_term.replace(' ', '+')
+
+    google_url = 'https://www.google.com/search?q={}&num={}&hl={}'.format(escaped_search_term, number_results, language_code)
+    print("\n",google_url,"\n")
+    response = requests.get(google_url, headers=USER_AGENT)
+    response.raise_for_status()
+
+    return search_term, response.text
+
+
+
+def parse_results(html, keyword):
+    soup = BeautifulSoup(html, 'html.parser')
+
+    found_results = ""
+    rank = 1
+    result_block = soup.find_all('div', attrs={'class': 'g'})
+    for result in result_block:
+
+        link = result.find('a', href=True)
+        title = result.find('h3', attrs={'class': 'r'})
+        description = result.find('span', attrs={'class': 'st'})
+        if link and title:
+            link = link['href']
+            title = title.get_text()
+            description = description.get_text()
+            if link != '#':
+                found_results += description
+                rank += 1
+    return found_results
+
+def scrape_google(search_term, number_results, language_code):
+    try:
+        keyword, html = fetch_results(search_term, number_results, language_code)
+        results = parse_results(html, keyword)
+        return results
+    except AssertionError:
+        raise Exception("Incorrect arguments parsed to function")
+    except requests.HTTPError:
+        raise Exception("You appear to have been blocked by Google")
+    except requests.RequestException:
+        raise Exception("Appears to be an issue with your connection")
+
+def searching (prompt):
+    keywords = [prompt]
+    data = []
+    try:
+        results = scrape_google(prompt,15, "en")
+        return results
+    except Exception as e:
+        print(e)
+
+    strData = ""
+    for d in data:
+        strData += (d['description'])
+    #strData = "".join(d['title'] for d in data)
+
+
+    strData = strData.replace("{","")
+    strData = strData.replace("}","")
+    strData = strData.replace(",","")
+    strData = strData.replace(":","")
+    strData = strData.replace("'","")
+    strData = strData.replace(".","")
+    strData = strData.replace("-","")
+    strData = strData.replace("|","")
+    return strData
