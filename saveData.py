@@ -1,10 +1,10 @@
 import csv
 
-def save(question,ans, RQuestion):
+def save(question,ans, RQuestion,predicted):
     print(question)
-    print(type(question))
     Row = [question,RQuestion]
     Row = Row + ans
-    with open("Results/QA.csv",'a',encoding='utf-8') as fd:
+    Row.append(predicted)
+    with open("Results/QA2.csv",'a',encoding='utf-8') as fd:
         fileWriter = csv.writer(fd,lineterminator='\n')
         fileWriter.writerow(Row)

@@ -27,11 +27,18 @@ def parse(question):
     question = question.replace(" an "," ")
     question = question.replace(" does "," ")
     question = question.replace(" at "," ")
+    question = question.replace(" in "," ")
+    question = question.replace(" it "," ")
+    question = question.replace(" its ", " ")
 
 
     question = question.replace("Which "," ")
     question = question.replace("What "," ")
     question = question.replace("An "," ")
     question = question.replace("A "," ")
+
+
+    keywords = question.replace("?","")
+    keywords = question.replace(",","")
 
     return question

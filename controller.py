@@ -1,4 +1,4 @@
-#import picTaker  #takes the screenshot when imported
+import picTaker  #takes the screenshot when imported
 import stringParser
 import ocr
 import questionParser
@@ -13,8 +13,8 @@ import time
 #print(end - start , "picTaker")
 
 masterStart = time.time()
-wordPic = ocr.getStr("Results/Pics/2018-04-18/3PM/5.png")
-#wordPic = ocr.getStr("Screenshots/exampleProduction.png")
+#wordPic = ocr.getStr("Results/Pics/2018-04-18/3PM/9.png")
+wordPic = ocr.getStr("Screenshots/exampleProduction.png")
 #print(wordPic)
 #print(wordPic)
 (question,answers) = stringParser.strPrsr(wordPic)
@@ -23,8 +23,6 @@ print("\n\n",question)
 print(answers,"\n\n")
 
 redQuestion = questionParser.parse(question)
-
-saveData.save(question,answers,redQuestion)
 
 countRes = lookup.run(redQuestion,answers)
 
@@ -52,3 +50,5 @@ else:
         print("TIE")
         for key,val in enumerate(ansNum):
             print(answers[ansNum[key]],"\n",)
+
+saveData.save(question,answers,redQuestion,answers[ansNum[0]])
