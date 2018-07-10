@@ -40,15 +40,20 @@ masterEnd = time.time()
 print("\n",masterEnd-masterStart, "  total\n")
 
 totSum = sum(countRes)
+ans_str = ""
 if totSum == 0:
-    print("I DONT KNOW")
+    ans_str += "I DONT KNOW"
+    print(ans_str)
 else:
     if count == 1:
-        print(answers[ansNum[0]])
+        ans_str += str(answers[ansNum[0]])
+        print(ans_str)
         print(countRes[ansNum[0]]/sum(countRes)*100)
     else:
-        print("TIE")
-        for key,val in enumerate(ansNum):
-            print(answers[ansNum[key]],"\n",)
+        ans_str += "TIE"
 
-saveData.save(question,answers,redQuestion,answers[ansNum[0]])
+        for key,val in enumerate(ansNum):
+            ans_str += str(answers[ansNum[key]])
+        print(ans_str)
+
+saveData.save(question,answers,redQuestion,ans_str)
